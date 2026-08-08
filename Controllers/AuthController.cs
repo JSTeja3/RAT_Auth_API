@@ -17,14 +17,11 @@ namespace RAT_AUTH_API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUserAsync(RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
-            await _authService.RegisterUserAsync(request);
+            var response = await _authService.RegisterAsync(request);
 
-            return Ok(new
-            {
-                Message = "User registered successfully."
-            });
+            return StatusCode(StatusCodes.Status201Created, response);
         }
         
     }

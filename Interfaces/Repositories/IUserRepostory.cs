@@ -5,7 +5,7 @@ namespace RAT_AUTH_API.Interfaces.Repositories
     public interface IUserRepository
     {
         Task<bool> EmailExistsAsync(string email);
-        Task AddAsync(User user);
+        Task RegisterAsync(User user);
     }
     
 }

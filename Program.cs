@@ -4,6 +4,7 @@ using RAT_AUTH_API.Interfaces.Repositories;
 using RAT_AUTH_API.Repositories;
 using RAT_AUTH_API.Interfaces.Services;
 using RAT_AUTH_API.Services;
+using RAT_AUTH_API.Middlewares;
 
 
 DotNetEnv.Env.Load();
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

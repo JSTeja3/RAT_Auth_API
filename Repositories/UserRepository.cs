@@ -18,7 +18,7 @@ namespace RAT_AUTH_API.Repositories
             return await _dbContext.Users.AnyAsync(u=>u.Email == email);
         }
 
-        public async Task AddAsync(User user)
+        public async Task RegisterAsync(User user)
         {
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
