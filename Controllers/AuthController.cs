@@ -23,6 +23,14 @@ namespace RAT_AUTH_API.Controllers
 
             return StatusCode(StatusCodes.Status201Created, response);
         }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginAsync(LoginRequest request)
+        {
+            var response = await _authService.LoginAsync(request);
+
+            return Ok(response);
+        }
         
     }
     
