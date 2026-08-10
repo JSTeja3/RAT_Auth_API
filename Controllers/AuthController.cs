@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RAT_AUTH_API.Interfaces.Services;
-using  RAT_AUTH_API.DTOs.Requests;
+using RAT_AUTH_API.DTOs.Requests;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RAT_AUTH_API.Controllers
 {
@@ -31,7 +32,17 @@ namespace RAT_AUTH_API.Controllers
 
             return Ok(response);
         }
-        
+
+        [HttpGet("me")]
+        [Authorize]
+        public IActionResult GetCurrentUser()
+        {
+            return Ok(new
+            {
+                Message = "You are authenticated."
+            });
+        }
+
     }
-    
+
 }
