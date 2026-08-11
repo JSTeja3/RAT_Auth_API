@@ -6,7 +6,7 @@ This project is part of my Backend Engineering learning roadmap where I implemen
 
 Current Status:
 - ✅ User Registration
-- 🚧 Login
-- 🚧 JWT Authentication
+- ✅ Login
+- ✅ JWT Authentication
 - 🚧 Refresh Tokens
 - 🚧 Role-Based Authorization

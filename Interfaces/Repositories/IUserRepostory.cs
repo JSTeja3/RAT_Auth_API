@@ -6,6 +6,8 @@ namespace RAT_AUTH_API.Interfaces.Repositories
     {
         Task<bool> EmailExistsAsync(string email);
         Task RegisterAsync(User user);
+
+        Task<User?> GetByEmailAsync(string email);
     }
     
 }

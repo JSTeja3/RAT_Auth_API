@@ -11,10 +11,12 @@ namespace RAT_AUTH_API.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepo;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(IUserRepository userRepo)
+        public AuthService(IUserRepository userRepo, IJwtService jwtService)
         {
             _userRepo = userRepo;
+            _jwtService = jwtService;
         }
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
         {
@@ -41,6 +43,32 @@ namespace RAT_AUTH_API.Services
                 Id = user.Id,
                 Message = "User registered successfully"
             };
+        }
+
+        public async Task<LoginResponse> LoginAsync(LoginRequest request)
+        {
+            var email = request.Email.Trim().ToLowerInvariant();
+            var user = await _userRepo.GetByEmailAsync(email);
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("Invalid email or password.");
+            }
+
+            var passwordValid = BCrypt.Net.BCrypt.EnhancedVerify(request.Password, user.PasswordHash);
+
+            if (!passwordValid)
+            {
+                throw new UnauthorizedAccessException("Invalid email or password.");
+            }
+
+            string accesstoken = _jwtService.GenerateToken(user);
+
+            return new LoginResponse
+            {
+              AccessToken = accesstoken   
+            };
+
         }
     }
 }
