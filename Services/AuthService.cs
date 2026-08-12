@@ -12,11 +12,15 @@ namespace RAT_AUTH_API.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly IJwtService _jwtService;
+        private readonly IRefreshTokenService _refreshTokenService;
+        private readonly IRefreshTokenRepository _refreshTokenRepo;
 
-        public AuthService(IUserRepository userRepo, IJwtService jwtService)
+        public AuthService(IUserRepository userRepo, IJwtService jwtService, IRefreshTokenService refreshTokenService, IRefreshTokenRepository refreshTokenRepo)
         {
             _userRepo = userRepo;
             _jwtService = jwtService;
+            _refreshTokenService = refreshTokenService;
+            _refreshTokenRepo = refreshTokenRepo;
         }
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
         {
@@ -64,9 +68,22 @@ namespace RAT_AUTH_API.Services
 
             string accesstoken = _jwtService.GenerateToken(user);
 
+            string refreshToken = _refreshTokenService.GenerateToken();
+            string refreshTokenHash = _refreshTokenService.HashToken(refreshToken);
+
+            var refreshTokenDb = new RefreshToken
+            {
+              TokenHash = refreshTokenHash,
+              ExpiresAt = DateTime.UtcNow.AddDays(7),
+              UserId = user.Id
+            };
+
+            await _refreshTokenRepo.AddAsync(refreshTokenDb);
+
             return new LoginResponse
             {
-              AccessToken = accesstoken   
+              AccessToken = accesstoken,
+              RefreshToken = refreshToken   
             };
 
         }
