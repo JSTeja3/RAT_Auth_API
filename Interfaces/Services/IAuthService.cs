@@ -8,5 +8,9 @@ namespace RAT_AUTH_API.Interfaces.Services
         Task<RegisterResponse> RegisterAsync(RegisterRequest request);
 
         Task<LoginResponse> LoginAsync(LoginRequest request);
+
+        Task<LoginResponse> RefreshAsync(RefreshRequest request);
+
+        Task<LogoutResponse> LogoutAsync(LogoutRequest request);
     }
 }

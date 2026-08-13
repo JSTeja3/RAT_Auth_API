@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using RAT_AUTH_API.Interfaces.Services;
 using RAT_AUTH_API.DTOs.Requests;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace RAT_AUTH_API.Controllers
 {
@@ -33,13 +35,48 @@ namespace RAT_AUTH_API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("me")]
+
+        [HttpPost("refresh")]
+
+        public async Task<IActionResult> RefreshAsync(RefreshRequest request)
+        {
+            var response = await _authService.RefreshAsync(request);
+
+            return Ok(response);
+        }
+
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> LogoutAsync(LogoutRequest request)
+        {
+            var response = await _authService.LogoutAsync(request);
+
+            return Ok(response);
+        }
+
+        [HttpGet("profile")]
         [Authorize]
-        public IActionResult GetCurrentUser()
+        public IActionResult GetProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var email = User.FindFirstValue(ClaimTypes.Email);
+
+
+            return Ok(new
+            {
+                UserId = userId,
+                Email = email
+            });
+        }
+
+        [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult Admin()
         {
             return Ok(new
             {
-                Message = "You are authenticated."
+                Message = "Welcome Admin"
             });
         }
 

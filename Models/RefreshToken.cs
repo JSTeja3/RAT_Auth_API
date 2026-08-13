@@ -8,7 +8,7 @@ namespace RAT_AUTH_API.Models
 
         public DateTime ExpiresAt{get; set;}
 
-        public DateTime RevokedAt{get; set;}
+        public DateTime? RevokedAt{get; set;}
 
         public int UserId{get; set;}
 

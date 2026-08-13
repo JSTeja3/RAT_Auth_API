@@ -25,7 +25,8 @@ namespace RAT_AUTH_API.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
