@@ -116,38 +116,39 @@ namespace RAT_AUTH_API.Services
             }
 
             await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try{
-            var user = storedToken.User;
-
-            // Revoke old refresh token
-            storedToken.RevokedAt = DateTime.UtcNow;
-
-            await _refreshTokenRepo.UpdateAsync(storedToken);
-
-            // Generate new tokens
-            var newAccessToken = _jwtService.GenerateToken(user);
-            var newRefreshToken = _refreshTokenService.GenerateToken();
-
-            var newRefreshTokenHash = _refreshTokenService.HashToken(newRefreshToken);
-
-            var newRefreshTokenDb = new RefreshToken
+            try
             {
-                TokenHash = newRefreshTokenHash,
-                ExpiresAt = DateTime.UtcNow.AddDays(7),
-                UserId = user.Id
-            };
+                var user = storedToken.User;
 
-            await _refreshTokenRepo.AddAsync(newRefreshTokenDb);
+                // Revoke old refresh token
+                storedToken.RevokedAt = DateTime.UtcNow;
 
-            await _dbContext.SaveChangesAsync();
+                await _refreshTokenRepo.UpdateAsync(storedToken);
 
-            await transaction.CommitAsync();
+                // Generate new tokens
+                var newAccessToken = _jwtService.GenerateToken(user);
+                var newRefreshToken = _refreshTokenService.GenerateToken();
 
-            return new LoginResponse
-            {
-                AccessToken = newAccessToken,
-                RefreshToken = newRefreshToken
-            };
+                var newRefreshTokenHash = _refreshTokenService.HashToken(newRefreshToken);
+
+                var newRefreshTokenDb = new RefreshToken
+                {
+                    TokenHash = newRefreshTokenHash,
+                    ExpiresAt = DateTime.UtcNow.AddDays(7),
+                    UserId = user.Id
+                };
+
+                await _refreshTokenRepo.AddAsync(newRefreshTokenDb);
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return new LoginResponse
+                {
+                    AccessToken = newAccessToken,
+                    RefreshToken = newRefreshToken
+                };
             }
             catch
             {
@@ -163,15 +164,15 @@ namespace RAT_AUTH_API.Services
 
             var storedToken = await _refreshTokenRepo.GetTokenHashAsync(tokenHash);
 
-            if(storedToken is null)
+            if (storedToken is null)
             {
                 throw new UnauthorizedAccessException("Invlaid refresh token.");
             }
-            if(storedToken.RevokedAt is not null)
+            if (storedToken.RevokedAt is not null)
             {
                 return new LogoutResponse
                 {
-                  Message = "Logged out successfully."  
+                    Message = "Logged out successfully."
                 };
             }
 
@@ -182,9 +183,9 @@ namespace RAT_AUTH_API.Services
             await _dbContext.SaveChangesAsync();
 
             return new LogoutResponse
-                {
-                  Message = "Logged out successfully."  
-                };
+            {
+                Message = "Logged out successfully."
+            };
         }
     }
 }
