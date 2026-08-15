@@ -8,5 +8,5 @@ Current Status:
 - ✅ User Registration
 - ✅ Login
 - ✅ JWT Authentication
-- 🚧 Refresh Tokens
-- 🚧 Role-Based Authorization
+- ✅ Refresh Tokens
+- ✅ Role-Based Authorization
