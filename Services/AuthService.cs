@@ -166,7 +166,7 @@ namespace RAT_AUTH_API.Services
 
             if (storedToken is null)
             {
-                throw new UnauthorizedAccessException("Invlaid refresh token.");
+                throw new UnauthorizedAccessException("Invalid refresh token.");
             }
             if (storedToken.RevokedAt is not null)
             {

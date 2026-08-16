@@ -31,6 +31,18 @@ namespace RAT_AUTH_API.Middlewares
 
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response));
             }
+            catch(UnauthorizedAccessException ex)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Response.ContentType = "application/json";
+                var response = new
+                {
+                    message = ex.Message
+                };
+
+                await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+
+            }
             catch(Exception)
             {
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
