@@ -137,7 +137,7 @@ Requires: [Authorize(Roles = "Admin")]
 
 ## Configuration
 
-Sensitive configuration such as database credentials and JWT signing keys should be provided through environment variables.
+Sensitive configuration such as database credentials and JWT signing keys are provided as sample below through environment variables.
 
 - Example:
 
@@ -164,29 +164,28 @@ Users
 RefreshTokens
 ```
 
-- Users
+✅ Users
 
 Stores:
 
-User ID
-First name
-Last name
-Email
-Password hash
-Role
-Created date
+- User ID
+- First name
+- Last name
+- Email
+- Password hash
+- Role
+- Created date
 
 
-- RefreshTokens
+✅ RefreshTokens
 
 Stores:
 
-Refresh token ID
-Token hash
-User ID
-Expiration date
-Revocation date
+- Refresh token ID
+- Token hash
+- User ID
+- Expiration date
+- Revocation date
 
-Raw refresh tokens are not stored in the database.
 
 
