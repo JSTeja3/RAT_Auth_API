@@ -17,19 +17,22 @@ namespace RAT_AUTH_API.Services
         private readonly IRefreshTokenService _refreshTokenService;
         private readonly IRefreshTokenRepository _refreshTokenRepo;
         private readonly AppDbContext _dbContext;
+        private readonly IConfiguration _configuration;
 
-        public AuthService(IUserRepository userRepo, IJwtService jwtService, IRefreshTokenService refreshTokenService, IRefreshTokenRepository refreshTokenRepo, AppDbContext dbContext)
+        public AuthService(IUserRepository userRepo, IJwtService jwtService, IRefreshTokenService refreshTokenService, IRefreshTokenRepository refreshTokenRepo, AppDbContext dbContext, IConfiguration configuration)
         {
             _userRepo = userRepo;
             _jwtService = jwtService;
             _refreshTokenService = refreshTokenService;
             _refreshTokenRepo = refreshTokenRepo;
             _dbContext = dbContext;
+            _configuration = configuration;
         }
         public async Task<RegisterResponse> RegisterAsync(RegisterRequest request)
         {
             var email = request.Email.Trim().ToLowerInvariant();
             var emailExists = await _userRepo.EmailExistsAsync(email);
+            var defaultRole = _configuration["Authentication:DefaultRole"]?? throw new InvalidOperationException("Default role is not configured");
 
             if (emailExists)
             {
@@ -41,6 +44,7 @@ namespace RAT_AUTH_API.Services
                 FirstName = request.FirstName.Trim(),
                 LastName = request.LastName.Trim(),
                 Email = email,
+                Role = defaultRole,
                 PasswordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(request.Password)
             };
 
