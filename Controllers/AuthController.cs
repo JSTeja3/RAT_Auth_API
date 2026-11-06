@@ -37,7 +37,6 @@ namespace RAT_AUTH_API.Controllers
 
 
         [HttpPost("refresh")]
-
         public async Task<IActionResult> RefreshAsync(RefreshRequest request)
         {
             var response = await _authService.RefreshAsync(request);
