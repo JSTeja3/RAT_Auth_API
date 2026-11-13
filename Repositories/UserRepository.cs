@@ -28,5 +28,9 @@ namespace RAT_AUTH_API.Repositories
         {
             return await _dbContext.Users.FirstOrDefaultAsync(u=>u.Email == email);
         }
+        public async Task<User?> GetByUserIdAsync(int userId)
+        {
+            return await _dbContext.Users.FindAsync(userId);
+        }
     }
 }
