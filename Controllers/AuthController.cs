@@ -55,18 +55,18 @@ namespace RAT_AUTH_API.Controllers
 
         [HttpGet("profile")]
         [Authorize]
-        public IActionResult GetProfile()
+        public async Task<IActionResult> GetProfileAsync()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var email = User.FindFirstValue(ClaimTypes.Email);
-
-
-            return Ok(new
+            if (!int.TryParse(userIdClaim, out var userId))
             {
-                UserId = userId,
-                Email = email
-            });
+                return Unauthorized();
+            }
+
+            var response = await _authService.GetProfileAsync(userId);
+
+            return Ok(response);
         }
 
         [HttpGet("admin")]

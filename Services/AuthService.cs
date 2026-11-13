@@ -191,5 +191,27 @@ namespace RAT_AUTH_API.Services
                 Message = "Logged out successfully."
             };
         }
+
+        public async Task<GetProfileResponse> GetProfileAsync(int userId)
+        {
+            var user = await _userRepo.GetByUserIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("Invalid user");
+            }
+
+            return new GetProfileResponse
+            {
+                Authenticated = true,
+                UserId = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Role = user.Role
+
+            };
+
+        }
     }
 }

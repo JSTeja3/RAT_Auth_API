@@ -12,5 +12,7 @@ namespace RAT_AUTH_API.Interfaces.Services
         Task<LoginResponse> RefreshAsync(RefreshRequest request);
 
         Task<LogoutResponse> LogoutAsync(LogoutRequest request);
+
+        Task<GetProfileResponse> GetProfileAsync(int userId);
     }
 }

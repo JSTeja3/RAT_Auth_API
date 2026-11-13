@@ -8,6 +8,8 @@ namespace RAT_AUTH_API.Interfaces.Repositories
         Task RegisterAsync(User user);
 
         Task<User?> GetByEmailAsync(string email);
+
+        Task<User?> GetByUserIdAsync(int userId);
     }
     
 }
