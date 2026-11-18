@@ -120,10 +120,15 @@ Revoke Refresh Token
 ### Profile
 
 ```text
-GET /api/auth/profile
 Authorization: Bearer <access-token>
-
+      |
+      | GET /api/auth/profile
+      v
 Requires: [Authorize]
+      |
+      | 
+      v
+Return user data    
 ```
 
 ### Admin
